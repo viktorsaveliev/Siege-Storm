@@ -1,3 +1,5 @@
+using SiegeStorm.PoolSystem;
+using SiegeStorm.WeaponSystem.ProjectileSystem;
 using System.Collections;
 using System.Linq.Expressions;
 using UnityEngine;
@@ -12,6 +14,8 @@ namespace SiegeStorm.WeaponSystem
         [SerializeField] private WeaponData _data;
         [SerializeField] private Transform _startProjectilePoint;
 
+        protected ObjectPool<Projectile> Projectiles;
+
         private int _currentBulletsCount;
         private bool _isReloading;
         private float _lastShootTime;
@@ -21,6 +25,8 @@ namespace SiegeStorm.WeaponSystem
             _currentBulletsCount = _data.BulletsInMagazine;
             _isReloading = false;
             _lastShootTime = 0;
+
+            Projectiles = new ObjectPool<Projectile>(Data.Projectile, transform, Data.BulletsInMagazine);
         }
 
         public bool TryShoot(WeaponShootInfo shootInfo)
@@ -39,7 +45,7 @@ namespace SiegeStorm.WeaponSystem
 
         protected abstract void Shoot(WeaponShootInfo shootInfo);
 
-        protected void OnShoot()
+        protected virtual void OnShoot()
         {
             _currentBulletsCount--;
             _lastShootTime = Time.time;

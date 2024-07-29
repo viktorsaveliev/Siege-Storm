@@ -9,11 +9,16 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
         public int Damage => _damage;
         public bool IsRadiusDamage => _radiusDamage;
         public float Radius => _radius;
+        public FlyBehaviour FlyBehaviour => _flyBehaviour;
 
         [SerializeField, Range(1, 500)] private int _damage;
 
         [SerializeField] private bool _radiusDamage;
         [ShowIf(nameof(_radiusDamage), true), SerializeField, Range(0.5f, 10)]
         private float _radius;
+
+        [SerializeField] private bool _flying;
+        [ShowIf(nameof(_flying), true), SerializeReference]
+        private FlyBehaviour _flyBehaviour;
     }
 }

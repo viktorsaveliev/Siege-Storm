@@ -5,7 +5,7 @@ namespace SiegeStorm.TowerSystem
     public class Tower : MonoBehaviour, IDamageable
     {
         public HealthSystem Health { get; private set; }
-        public Vector3 CurrentPosition => transform.position;
+        public Vector3 Position => transform.position;
 
         private void Awake()
         {

@@ -35,7 +35,7 @@ namespace SiegeStorm.UnitSystem
         {
             _target = target;
             Agent.enabled = true;
-            Agent.destination = _target.CurrentPosition;
+            Agent.destination = _target.Position;
         }
 
         protected bool TryAttack()

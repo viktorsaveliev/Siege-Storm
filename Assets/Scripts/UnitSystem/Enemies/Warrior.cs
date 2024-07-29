@@ -6,7 +6,7 @@ namespace SiegeStorm.UnitSystem
     public abstract class Warrior : Unit, IDamageable
     {
         public HealthSystem Health { get; private set; }
-        public Vector3 CurrentPosition => transform.position;
+        public Vector3 Position => transform.position;
         public WarriorData Data => _data;
 
         public event Action OnAttack;

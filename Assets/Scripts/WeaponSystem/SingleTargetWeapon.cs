@@ -1,3 +1,4 @@
+using SiegeStorm.WeaponSystem.ProjectileSystem;
 using UnityEngine;
 
 namespace SiegeStorm.WeaponSystem
@@ -12,7 +13,8 @@ namespace SiegeStorm.WeaponSystem
                 return;
             }
 
-            shootInfo.Target.Health.TakeDamage(Data.Damage);
+            Projectile projectile = Projectiles.GetInactiveObject();
+            projectile.Launch(StartProjectilePoint.position, shootInfo.Target.Position, Data.ProjectileSpeed);
         }
     }
 }

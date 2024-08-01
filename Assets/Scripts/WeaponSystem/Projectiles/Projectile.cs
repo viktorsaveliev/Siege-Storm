@@ -20,6 +20,8 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
 
         public virtual void Launch(Vector3 startPoint, Vector3 targetPoint, float speed)
         {
+            gameObject.SetActive(true);
+
             transform.position = startPoint;
             transform.LookAt(targetPoint);
 
@@ -33,6 +35,8 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
         protected virtual void OnFlyingEnded()
         {
             Data.FlyBehaviour.OnDestinationTarget -= OnFlyingEnded;
+            gameObject.SetActive(false);
+
             OnDestinationTarget?.Invoke();
         }
     }

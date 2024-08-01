@@ -1,7 +1,7 @@
 using SiegeStorm.PoolSystem;
 using SiegeStorm.WeaponSystem.ProjectileSystem;
+using System;
 using System.Collections;
-using System.Linq.Expressions;
 using UnityEngine;
 
 namespace SiegeStorm.WeaponSystem
@@ -10,6 +10,11 @@ namespace SiegeStorm.WeaponSystem
     {
         public WeaponData Data => _data;
         public Transform StartProjectilePoint => _startProjectilePoint;
+        public int CurrentBulletsCount => _currentBulletsCount;
+
+        public event Action OnReloadStart;
+        public event Action OnReloadEnd;
+        public event Action OnFired;
 
         [SerializeField] private WeaponData _data;
         [SerializeField] private Transform _startProjectilePoint;
@@ -27,6 +32,7 @@ namespace SiegeStorm.WeaponSystem
             _lastShootTime = 0;
 
             Projectiles = new ObjectPool<Projectile>(Data.Projectile, transform, Data.BulletsInMagazine);
+            Projectiles.CreatePool();
         }
 
         public bool TryShoot(WeaponShootInfo shootInfo)
@@ -54,6 +60,8 @@ namespace SiegeStorm.WeaponSystem
             {
                 Reload();
             }
+
+            OnFired?.Invoke();
         }
 
         public void Reload()
@@ -71,12 +79,16 @@ namespace SiegeStorm.WeaponSystem
 
         private IEnumerator ReloadCoroutine()
         {
+            OnReloadStart?.Invoke();
+
             _isReloading = true;
 
             yield return new WaitForSeconds(_data.ReloadDuration);
 
             _currentBulletsCount = _data.BulletsInMagazine;
             _isReloading = false;
+
+            OnReloadEnd?.Invoke();
         }
     }
 }

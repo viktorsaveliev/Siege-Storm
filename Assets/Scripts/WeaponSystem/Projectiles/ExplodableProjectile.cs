@@ -21,8 +21,6 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
                 IDamageable target = _targets[i].GetComponent<IDamageable>();
                 target.Health.TakeDamage(Data.Damage);
             }
-
-            print(numColliders);
         }
     }
 }

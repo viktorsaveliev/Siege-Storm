@@ -25,7 +25,7 @@ namespace SiegeStorm.WeaponSystem
         [SerializeField, Range(1, 30)] private int _bulletsInMagazine;
         [SerializeField, Range(0.05f, 2)] private float _shootDelay;
         [SerializeField, Range(1, 5)] private float _reloadDuration;
-        [SerializeField, Range(1, 25)] private float _projectileSpeed;
+        [SerializeField, Range(1, 50)] private float _projectileSpeed;
         [SerializeField] private Projectile _projectilePrefab;
     }
 }

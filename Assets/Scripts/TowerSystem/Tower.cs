@@ -24,7 +24,7 @@ namespace SiegeStorm.TowerSystem
 
         private void OnTakeDamage(int damage)
         {
-            print($"Taked damage {damage}");
+            
         }
     }
 }

@@ -22,6 +22,7 @@ namespace SiegeStorm.PoolSystem
             for (int i = 0; i < _capacity; i++)
             {
                 _pool[i] = Object.Instantiate(_prefab, _container);
+                _pool[i].gameObject.SetActive(false);
             }
         }
 

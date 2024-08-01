@@ -1,6 +1,5 @@
 using SiegeStorm.TowerSystem;
 using SiegeStorm.WeaponSystem.ProjectileSystem;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace SiegeStorm.UnitSystem
@@ -28,7 +27,7 @@ namespace SiegeStorm.UnitSystem
                 print("ERROR");
             }
 
-            projectile.Launch(projectile.transform.position, _targetPoint.position, 15);
+            projectile.Launch(projectile.transform.position, _targetPoint.position, 50);
         }
     }
 }

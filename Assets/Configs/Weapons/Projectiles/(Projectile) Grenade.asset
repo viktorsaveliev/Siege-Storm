@@ -14,13 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 30
   _radiusDamage: 1
-  _radius: 5
-  _flying: 1
-  _flyBehaviour:
-    rid: 2279280580967530501
+  _radius: 2
+  _modules: []
   references:
     version: 2
-    RefIds:
-    - rid: 2279280580967530501
-      type: {class: ParabolicFly, ns: SiegeStorm, asm: Assembly-CSharp}
-      data: 
+    RefIds: []

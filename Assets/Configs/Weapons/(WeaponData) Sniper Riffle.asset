@@ -16,7 +16,7 @@ MonoBehaviour:
   _name: Sniper Riffle
   _description: 
   _bulletsInMagazine: 5
-  _shootDelay: 1
+  _shootDelay: 0.31
   _reloadDuration: 3
   _projectileSpeed: 50
   _projectilePrefab: {fileID: 1578335922784169247, guid: 95b215ad53f356744bc84ade928f40ed,

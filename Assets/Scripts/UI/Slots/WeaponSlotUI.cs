@@ -6,17 +6,29 @@ using UnityEngine.UI;
 
 namespace SiegeStorm.UISystem
 {
+    [RequireComponent(typeof(Button))]
     public class WeaponSlotUI : MonoBehaviour
     {
+        [SerializeField] private Button _button;
+
         [SerializeField] private Image _icon;
         [SerializeField] private Image _reloadIndicator;
         [SerializeField] private TMP_Text _bulletsCount;
 
         private WeaponSlot _slot;
 
+        private void OnValidate()
+        {
+            if (_button == null)
+            {
+                _button = GetComponent<Button>();
+            }
+        }
+
         private void OnDestroy()
         {
             _slot.OnWeaponChanged -= SetWeapon;
+            _slot.OnSelectStateChanged -= OnStateChanged;
 
             if (_slot.CurrentWeapon != null)
             {
@@ -30,10 +42,25 @@ namespace SiegeStorm.UISystem
         {
             _slot = slot;
             _slot.OnWeaponChanged += SetWeapon;
+            _slot.OnSelectStateChanged += OnStateChanged;
 
-            if(_slot.CurrentWeapon != null)
+            if (_slot.CurrentWeapon != null)
             {
                 SetWeapon(_slot.CurrentWeapon);
+            }
+        }
+
+        private void OnStateChanged(bool selected)
+        {
+            float duration = 0.5f;
+
+            if(selected)
+            {
+                _button.image.rectTransform.DOScale(new Vector2(1.2f, 1.2f), duration);
+            }
+            else
+            {
+                _button.image.rectTransform.DOScale(new Vector2(1f, 1f), duration);
             }
         }
 

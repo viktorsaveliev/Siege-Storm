@@ -16,6 +16,8 @@ namespace SiegeStorm.PlayerController
         public event Action<IInteractable> OnSelectObject;
         public event Action<Vector3> OnClickGround;
 
+        public const float MAX_RAY_DISTANCE = 100;
+
         [SerializeField] private LayerMask _objectLayerMask;
         [SerializeField] private LayerMask _groundLayerMask;
 
@@ -44,7 +46,7 @@ namespace SiegeStorm.PlayerController
             IsPointerOverUI = EventSystem.current.IsPointerOverGameObject();
             if (IsPointerOverUI) return;
 
-            if (Physics.Raycast(GetRayByMousePosition(), out RaycastHit hitInfo, 30, _objectLayerMask))
+            if (Physics.Raycast(GetRayByMousePosition(), out RaycastHit hitInfo, MAX_RAY_DISTANCE, _objectLayerMask))
             {
                 if (hitInfo.transform.TryGetComponent(out IInteractable interactable) && interactable.IsInteractable)
                 {
@@ -63,6 +65,12 @@ namespace SiegeStorm.PlayerController
             }
         }
 
+        [Inject]
+        public void Construct(InputData inputData)
+        {
+            _inputData = inputData;
+        }
+
         private void OnPlayerClick(bool performed)
         {
             if (performed || IsPointerOverUI) return;
@@ -73,7 +81,7 @@ namespace SiegeStorm.PlayerController
             }
             else
             {
-                if (Physics.Raycast(GetRayByMousePosition(), out RaycastHit hitInfo, 30, _groundLayerMask))
+                if (Physics.Raycast(GetRayByMousePosition(), out RaycastHit hitInfo, MAX_RAY_DISTANCE, _groundLayerMask))
                 {
                     Vector3 targetPosition = hitInfo.point;
                     OnClickGround?.Invoke(targetPosition);
@@ -94,12 +102,6 @@ namespace SiegeStorm.PlayerController
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             return _camera.ScreenPointToRay(mousePosition);
-        }
-
-        [Inject]
-        public void Construct(InputData inputData)
-        {
-            _inputData = inputData;
         }
     }
 }

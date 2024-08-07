@@ -9,13 +9,15 @@ namespace SiegeStorm
     {
         public override IEnumerator StartFly()
         {
+            FlySpeed = Vector3.Distance(StartPosition, TargetPosition) / FlySpeed;
+
             while (IsFlying)
             {
                 TimeElapsed += Time.deltaTime;
 
-                if (TimeElapsed < FlightDuration)
+                if (TimeElapsed < FlySpeed)
                 {
-                    float t = TimeElapsed / FlightDuration;
+                    float t = TimeElapsed / FlySpeed;
 
                     Vector3 currentPosition = Vector3.Lerp(StartPosition, TargetPosition, t);
                     Target.position = currentPosition;

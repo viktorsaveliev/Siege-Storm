@@ -15,12 +15,5 @@ MonoBehaviour:
   _damage: 10
   _radiusDamage: 0
   _radius: 0.5
-  _flying: 1
-  _flyBehaviour:
-    rid: 2279280580967530502
-  references:
-    version: 2
-    RefIds:
-    - rid: 2279280580967530502
-      type: {class: StraightFly, ns: SiegeStorm, asm: Assembly-CSharp}
-      data: 
+  _haveEffect: 0
+  _explosionEffect: {fileID: 0}

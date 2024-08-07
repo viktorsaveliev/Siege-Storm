@@ -1,5 +1,4 @@
 using SiegeStorm.TowerSystem;
-using SiegeStorm.WeaponSystem.ProjectileSystem;
 using UnityEngine;
 
 namespace SiegeStorm.UnitSystem
@@ -8,9 +7,6 @@ namespace SiegeStorm.UnitSystem
     {
         [SerializeField] private Warrior _enemy;
         [SerializeField] private Tower _tower;
-
-        [SerializeField] private Projectile projectile;
-        [SerializeField] private Transform _targetPoint;
 
         private void Start()
         {
@@ -26,8 +22,6 @@ namespace SiegeStorm.UnitSystem
             {
                 print("ERROR");
             }
-
-            projectile.Launch(projectile.transform.position, _targetPoint.position, 50);
         }
     }
 }

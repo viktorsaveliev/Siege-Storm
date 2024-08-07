@@ -4,6 +4,7 @@ namespace SiegeStorm
 {
     public class HealthSystem
     {
+        public bool IsAlive { get; private set; }
         public int Health => _health;
         public int MaxHealth => _maxHealth;
 
@@ -17,6 +18,8 @@ namespace SiegeStorm
         {
             _maxHealth = maxHealth;
             _health = maxHealth;
+
+            IsAlive = true;
         }
 
         public void SetHealth(int health)
@@ -47,6 +50,7 @@ namespace SiegeStorm
 
             if (_health <= 0)
             {
+                IsAlive = false;
                 OnDead?.Invoke();
             }
 

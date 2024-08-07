@@ -10,6 +10,7 @@ namespace SiegeStorm.InputSystem
         public event Action<bool> OnClickLmb;
         public event Action<bool> OnPressLmb;
         public event Action<bool> OnScrollWheel;
+        public event Action<int> OnSwitchWeaponSlot;
 
         public event Action OnRotated;
         public event Action OnCanceled;
@@ -42,6 +43,10 @@ namespace SiegeStorm.InputSystem
 
             _input.Player.Rotate.performed += OnRotate;
             _input.Player.Cancel.performed += OnCancel;
+
+            _input.Player.Slot1.performed += ctx => SwitchWeaponSlot(0);
+            _input.Player.Slot2.performed += ctx => SwitchWeaponSlot(1);
+            _input.Player.Slot3.performed += ctx => SwitchWeaponSlot(2);
         }
 
         public void Dispose()
@@ -57,6 +62,15 @@ namespace SiegeStorm.InputSystem
 
             _input.Player.Rotate.performed -= OnRotate;
             _input.Player.Cancel.performed -= OnCancel;
+
+            _input.Player.Slot1.performed -= ctx => SwitchWeaponSlot(0);
+            _input.Player.Slot2.performed -= ctx => SwitchWeaponSlot(1);
+            _input.Player.Slot3.performed -= ctx => SwitchWeaponSlot(2);
+        }
+
+        private void SwitchWeaponSlot(int slotID)
+        {
+            OnSwitchWeaponSlot?.Invoke(slotID);
         }
 
         private void OnMove(InputAction.CallbackContext context)

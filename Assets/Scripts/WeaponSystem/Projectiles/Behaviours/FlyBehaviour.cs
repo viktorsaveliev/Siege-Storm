@@ -13,7 +13,7 @@ namespace SiegeStorm
         protected Vector3 StartPosition;
         protected Vector3 TargetPosition;
         protected float Speed;
-        protected float FlightDuration;
+        protected float FlySpeed;
         protected float TimeElapsed;
         protected bool IsFlying;
 
@@ -26,7 +26,7 @@ namespace SiegeStorm
             Speed = speed;
             TimeElapsed = 0;
             IsFlying = true;
-            FlightDuration = Vector3.Distance(startPoint, targetPoint) / speed;
+            FlySpeed = speed;
         }
 
         public abstract IEnumerator StartFly();

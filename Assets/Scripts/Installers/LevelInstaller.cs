@@ -1,5 +1,7 @@
+using SiegeStorm.Destructibility;
 using SiegeStorm.InputSystem;
 using SiegeStorm.PlayerController;
+using SiegeStorm.WeaponSystem;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +10,8 @@ namespace SiegeStorm
     public class LevelInstaller : MonoInstaller
     {
         [SerializeField] private MouseRaycaster _interactHandler;
+        [SerializeField] private PlayerWeapon _playerWeapon;
+        [SerializeField] private CrackSystem _crackSystem;
 
         private InputData _inputData;
 
@@ -23,6 +27,8 @@ namespace SiegeStorm
             Container.Bind<InputData>().FromNew().AsSingle();
 
             Container.Bind<IInteractHandler>().FromInstance(_interactHandler).AsSingle();
+            Container.Bind<PlayerWeapon>().FromInstance(_playerWeapon).AsSingle();
+            Container.Bind<CrackSystem>().FromInstance(_crackSystem).AsSingle();
         }
 
         private void Resolve()

@@ -3,6 +3,7 @@ using SiegeStorm.WeaponSystem.ProjectileSystem;
 using System;
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 namespace SiegeStorm.WeaponSystem
 {
@@ -19,19 +20,19 @@ namespace SiegeStorm.WeaponSystem
         [SerializeField] private WeaponData _data;
         [SerializeField] private Transform _startProjectilePoint;
 
-        protected ObjectPool<Projectile> Projectiles;
+        protected DIObjectPool<Projectile> Projectiles;
 
         private int _currentBulletsCount;
         private bool _isReloading;
         private float _lastShootTime;
 
-        public virtual void Init()
+        public virtual void Init(DiContainer diContainer)
         {
             _currentBulletsCount = _data.BulletsInMagazine;
             _isReloading = false;
             _lastShootTime = 0;
 
-            Projectiles = new ObjectPool<Projectile>(Data.Projectile, transform, Data.BulletsInMagazine);
+            Projectiles = new DIObjectPool<Projectile>(Data.Projectile, diContainer, transform, Data.BulletsInMagazine);
             Projectiles.CreatePool();
         }
 

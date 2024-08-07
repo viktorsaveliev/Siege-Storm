@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SiegeStorm.WeaponSystem.ProjectileSystem
 {
-    public class Bullet : Projectile
+    public class Bullet : FlyingProjectile
     {
         private void OnCollisionEnter(Collision collision)
         {
@@ -11,6 +11,7 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
                 if (collision.gameObject.TryGetComponent(out IDamageable target))
                 {
                     target.Health.TakeDamage(Data.Damage);
+                    OnFlyingEnded();
                 }
             }
         }

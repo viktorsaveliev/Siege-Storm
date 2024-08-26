@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,8 +6,8 @@ namespace SiegeStorm.InputSystem
 {
     public class InputData : IDisposable
     {
-        public event Action<bool> OnClickLmb;
-        public event Action<bool> OnPressLmb;
+        public event Action<InputAction.CallbackContext> OnShoot;
+
         public event Action<bool> OnScrollWheel;
         public event Action<int> OnSwitchWeaponSlot;
 
@@ -16,19 +15,12 @@ namespace SiegeStorm.InputSystem
         public event Action OnCanceled;
 
         private PlayerInputActions _input;
-        private MonoBehaviour _monoBeh;
-
-        private bool _isDragging;
-        private Vector2 _startMousePosition;
-        private const float _dragThreshold = 10f;
 
         public Vector2 Move { get; private set; }
         public Vector2 Scroll { get; private set; }
 
-        public void Init(MonoBehaviour monoBeh)
+        public void Init()
         {
-            _monoBeh = monoBeh;
-
             _input = new();
             _input.Enable();
 
@@ -38,8 +30,9 @@ namespace SiegeStorm.InputSystem
             _input.Player.ScrollWheel.performed += OnScroll;
             _input.Player.ScrollWheel.canceled += OnScroll;
 
-            _input.Player.Select.performed += OnAction;
-            _input.Player.Select.canceled += OnAction;
+            _input.Player.FirstWeaponShoot.started += OnWeaponShoot;
+            _input.Player.FirstWeaponShoot.performed += OnWeaponShoot;
+            _input.Player.FirstWeaponShoot.canceled += OnWeaponShoot;
 
             _input.Player.Rotate.performed += OnRotate;
             _input.Player.Cancel.performed += OnCancel;
@@ -57,8 +50,9 @@ namespace SiegeStorm.InputSystem
             _input.Player.ScrollWheel.performed -= OnScroll;
             _input.Player.ScrollWheel.canceled -= OnScroll;
 
-            _input.Player.Select.performed -= OnAction;
-            _input.Player.Select.canceled -= OnAction;
+            _input.Player.FirstWeaponShoot.started -= OnWeaponShoot;
+            _input.Player.FirstWeaponShoot.performed -= OnWeaponShoot;
+            _input.Player.FirstWeaponShoot.canceled -= OnWeaponShoot;
 
             _input.Player.Rotate.performed -= OnRotate;
             _input.Player.Cancel.performed -= OnCancel;
@@ -101,24 +95,9 @@ namespace SiegeStorm.InputSystem
             OnScrollWheel?.Invoke(context.performed);
         }
 
-        private void OnAction(InputAction.CallbackContext context)
+        private void OnWeaponShoot(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                _isDragging = false;
-                _monoBeh.StartCoroutine(Tick(context));
-            }
-            else if (context.canceled)
-            {
-                if (_isDragging)
-                {
-                    OnPressLmb?.Invoke(false);
-                }
-                else
-                {
-                    OnClickLmb?.Invoke(false);
-                }
-            }
+            OnShoot?.Invoke(context);
         }
 
         private void OnCancel(InputAction.CallbackContext context)
@@ -129,29 +108,6 @@ namespace SiegeStorm.InputSystem
         private void OnRotate(InputAction.CallbackContext context)
         {
             OnRotated?.Invoke();
-        }
-
-        private IEnumerator Tick(InputAction.CallbackContext context)
-        {
-            _startMousePosition = Mouse.current.position.ReadValue();
-
-            while (context.action.ReadValue<float>() > 0.1f)
-            {
-                if (!_isDragging)
-                {
-                    Vector2 currentMousePosition = Mouse.current.position.ReadValue();
-                    float dragDistance = Vector2.Distance(_startMousePosition, currentMousePosition);
-
-                    if (dragDistance > _dragThreshold)
-                    {
-                        OnPressLmb?.Invoke(context.performed);
-                        _isDragging = true;
-                        yield break;
-                    }
-                }
-
-                yield return null;
-            }
         }
     }
 }

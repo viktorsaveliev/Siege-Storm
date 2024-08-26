@@ -15,9 +15,10 @@ MonoBehaviour:
   _icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   _name: Sniper Riffle
   _description: 
-  _bulletsInMagazine: 5
-  _shootDelay: 0.31
+  _bulletsInMagazine: 30
+  _shootDelay: 0.1
   _reloadDuration: 3
+  _useProjectile: 0
   _projectileSpeed: 50
   _projectilePrefab: {fileID: 1578335922784169247, guid: 95b215ad53f356744bc84ade928f40ed,
     type: 3}

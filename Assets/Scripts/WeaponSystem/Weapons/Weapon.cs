@@ -1,68 +1,47 @@
-using SiegeStorm.PoolSystem;
-using SiegeStorm.WeaponSystem.ProjectileSystem;
+using SiegeStorm.PlayerController;
 using System;
 using System.Collections;
 using UnityEngine;
 using Zenject;
+using static SiegeStorm.WeaponSystem.PlayerWeapon;
 
 namespace SiegeStorm.WeaponSystem
 {
     public abstract class Weapon : MonoBehaviour
     {
         public WeaponData Data => _data;
-        public Transform StartProjectilePoint => _startProjectilePoint;
-        public int CurrentBulletsCount => _currentBulletsCount;
+        public int CurrentBulletsCount { get; protected set; }
 
         public event Action OnReloadStart;
         public event Action OnReloadEnd;
         public event Action OnFired;
 
         [SerializeField] private WeaponData _data;
-        [SerializeField] private Transform _startProjectilePoint;
 
-        protected DIObjectPool<Projectile> Projectiles;
-
-        private int _currentBulletsCount;
+        private IInteractHandler _interactHandler;
         private bool _isReloading;
         private float _lastShootTime;
 
-        public virtual void Init(DiContainer diContainer)
+        public virtual void Init(DiContainer diContainer, IInteractHandler interactHandler)
         {
-            _currentBulletsCount = _data.BulletsInMagazine;
+            _interactHandler = interactHandler;
+
+            CurrentBulletsCount = _data.BulletsInMagazine;
             _isReloading = false;
             _lastShootTime = 0;
-
-            Projectiles = new DIObjectPool<Projectile>(Data.Projectile, diContainer, transform, Data.BulletsInMagazine);
-            Projectiles.CreatePool();
         }
 
-        public bool TryShoot(WeaponShootInfo shootInfo)
+        public bool TryShoot(ShootPhase shootStep)
         {
             if (CanShoot())
             {
-                Shoot(shootInfo);
-                OnShoot();
+                Shoot(shootStep);
                 return true;
             }
             else
             {
                 return false;
             }
-        }
-
-        protected abstract void Shoot(WeaponShootInfo shootInfo);
-
-        protected virtual void OnShoot()
-        {
-            _currentBulletsCount--;
-            _lastShootTime = Time.time;
-
-            if (_currentBulletsCount <= 0)
-            {
-                Reload();
-            }
-
-            OnFired?.Invoke();
         }
 
         public void Reload()
@@ -73,9 +52,32 @@ namespace SiegeStorm.WeaponSystem
             }
         }
 
+        protected Vector3 GetTargetPosition()
+        {
+            return _interactHandler.GetTargetPosition();
+        }
+
+        protected virtual void Shoot(ShootPhase shootStep)
+        {
+            OnShoot();
+        }
+
+        protected virtual void OnShoot()
+        {
+            CurrentBulletsCount--;
+            _lastShootTime = Time.time;
+
+            if (CurrentBulletsCount <= 0)
+            {
+                Reload();
+            }
+
+            OnFired?.Invoke();
+        }
+
         private bool CanShoot()
         {
-            return !_isReloading && _currentBulletsCount > 0 && Time.time - _lastShootTime >= Data.ShootDelay;
+            return !_isReloading && CurrentBulletsCount > 0 && Time.time - _lastShootTime >= Data.ShootDelay;
         }
 
         private IEnumerator ReloadCoroutine()
@@ -86,7 +88,7 @@ namespace SiegeStorm.WeaponSystem
 
             yield return new WaitForSeconds(_data.ReloadDuration);
 
-            _currentBulletsCount = _data.BulletsInMagazine;
+            CurrentBulletsCount = _data.BulletsInMagazine;
             _isReloading = false;
 
             OnReloadEnd?.Invoke();

@@ -55,9 +55,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Select"",
+                    ""name"": ""FirstWeaponShoot"",
                     ""type"": ""Button"",
                     ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondWeaponShoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""833cc4f6-d02e-489b-9ac1-20a681d7571a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -277,56 +286,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""886e731e-7071-4ae4-95c0-e61739dad6fd"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Touch"",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ee3d0cd2-254e-47a7-a8cb-bc94d9658c54"",
-                    ""path"": ""<Joystick>/trigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8255d333-5683-4943-a58a-ccb207ff1dce"",
-                    ""path"": ""<XRController>/{PrimaryAction}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""XR"",
-                    ""action"": ""Select"",
+                    ""action"": ""FirstWeaponShoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -415,6 +380,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Slot3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35b11bdf-e6cd-4a76-944f-004200cb7524"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SecondWeaponShoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1005,7 +981,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_ScrollWheel = m_Player.FindAction("ScrollWheel", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_Select = m_Player.FindAction("Select", throwIfNotFound: true);
+        m_Player_FirstWeaponShoot = m_Player.FindAction("FirstWeaponShoot", throwIfNotFound: true);
+        m_Player_SecondWeaponShoot = m_Player.FindAction("SecondWeaponShoot", throwIfNotFound: true);
         m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
         m_Player_Cancel = m_Player.FindAction("Cancel", throwIfNotFound: true);
         m_Player_Slot1 = m_Player.FindAction("Slot1", throwIfNotFound: true);
@@ -1087,7 +1064,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_ScrollWheel;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_Select;
+    private readonly InputAction m_Player_FirstWeaponShoot;
+    private readonly InputAction m_Player_SecondWeaponShoot;
     private readonly InputAction m_Player_Rotate;
     private readonly InputAction m_Player_Cancel;
     private readonly InputAction m_Player_Slot1;
@@ -1100,7 +1078,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @ScrollWheel => m_Wrapper.m_Player_ScrollWheel;
         public InputAction @Look => m_Wrapper.m_Player_Look;
-        public InputAction @Select => m_Wrapper.m_Player_Select;
+        public InputAction @FirstWeaponShoot => m_Wrapper.m_Player_FirstWeaponShoot;
+        public InputAction @SecondWeaponShoot => m_Wrapper.m_Player_SecondWeaponShoot;
         public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
         public InputAction @Cancel => m_Wrapper.m_Player_Cancel;
         public InputAction @Slot1 => m_Wrapper.m_Player_Slot1;
@@ -1124,9 +1103,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @Select.started += instance.OnSelect;
-            @Select.performed += instance.OnSelect;
-            @Select.canceled += instance.OnSelect;
+            @FirstWeaponShoot.started += instance.OnFirstWeaponShoot;
+            @FirstWeaponShoot.performed += instance.OnFirstWeaponShoot;
+            @FirstWeaponShoot.canceled += instance.OnFirstWeaponShoot;
+            @SecondWeaponShoot.started += instance.OnSecondWeaponShoot;
+            @SecondWeaponShoot.performed += instance.OnSecondWeaponShoot;
+            @SecondWeaponShoot.canceled += instance.OnSecondWeaponShoot;
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
@@ -1155,9 +1137,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @Select.started -= instance.OnSelect;
-            @Select.performed -= instance.OnSelect;
-            @Select.canceled -= instance.OnSelect;
+            @FirstWeaponShoot.started -= instance.OnFirstWeaponShoot;
+            @FirstWeaponShoot.performed -= instance.OnFirstWeaponShoot;
+            @FirstWeaponShoot.canceled -= instance.OnFirstWeaponShoot;
+            @SecondWeaponShoot.started -= instance.OnSecondWeaponShoot;
+            @SecondWeaponShoot.performed -= instance.OnSecondWeaponShoot;
+            @SecondWeaponShoot.canceled -= instance.OnSecondWeaponShoot;
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
@@ -1358,7 +1343,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnSelect(InputAction.CallbackContext context);
+        void OnFirstWeaponShoot(InputAction.CallbackContext context);
+        void OnSecondWeaponShoot(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
         void OnSlot1(InputAction.CallbackContext context);

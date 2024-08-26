@@ -5,16 +5,17 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
 {
     public class Grenade : FlyingProjectile, IExplodable
     {
-        public ExplosionHandler ExplosionHandler { get; private set; }
+        public Explosion Explosion { get; private set; }
 
         [SerializeField] private ParticleSystem _explode;
 
         private void Awake()
         {
-            ExplosionHandler = new(_explode, Data, TargetLayerMask);
+            Explosion = new(_explode, TargetLayerMask);
+            Explosion.Init();
         }
 
-        public virtual void Explode() => ExplosionHandler.Explode(transform.position);
+        public virtual void Explode() => Explosion.Explode(transform.position, Data.Radius, Data.Damage);
 
         protected override void OnFlyingEnded()
         {

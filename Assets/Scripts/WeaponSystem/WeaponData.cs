@@ -17,15 +17,21 @@ namespace SiegeStorm.WeaponSystem
         public Projectile Projectile => _projectilePrefab;
         public int Damage => _projectilePrefab.Data.Damage;
 
+        [Header("Base Settings")]
         [SerializeField, PreviewField(Alignment = ObjectFieldAlignment.Left)] 
         private Sprite _icon;
         
         [SerializeField] private string _name;
         [SerializeField] private string _description;
-        [SerializeField, Range(1, 30)] private int _bulletsInMagazine;
+        [SerializeField, Range(1, 150)] private int _bulletsInMagazine;
         [SerializeField, Range(0.05f, 2)] private float _shootDelay;
-        [SerializeField, Range(1, 5)] private float _reloadDuration;
-        [SerializeField, Range(1, 50)] private float _projectileSpeed;
-        [SerializeField] private Projectile _projectilePrefab;
+        [SerializeField, Range(1, 15)] private float _reloadDuration;
+
+        [Header("Projectile Settings")]
+        [SerializeField] private bool _useProjectile;
+        [SerializeField, Range(1, 50), ShowIf(nameof(_useProjectile), true)] 
+        private float _projectileSpeed;
+        [SerializeField, ShowIf(nameof(_useProjectile), true)] 
+        private Projectile _projectilePrefab;
     }
 }

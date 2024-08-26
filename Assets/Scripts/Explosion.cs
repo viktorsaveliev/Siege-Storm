@@ -1,4 +1,3 @@
-using SiegeStorm.WeaponSystem.ProjectileSystem;
 using System;
 using UnityEngine;
 
@@ -8,57 +7,19 @@ namespace SiegeStorm.Destructibility
     {
         public event Action OnExploded;
 
-        private readonly ParticleSystem _effect;
-        private readonly Vector3 _position;
-        private readonly float _radius;
-        private readonly int _damage;
+        private readonly ParticleSystem _explode;
         private readonly LayerMask _targetLayer;
 
         private readonly Collider[] _targets = new Collider[10];
 
-        public Explosion(ParticleSystem effect, Vector3 position, float radius, int damage, LayerMask targetLayer)
+        public Explosion(ParticleSystem effect, LayerMask targetLayer)
         {
-            _effect = effect;
-            _position = position;
-            _radius = radius;
-            _damage = damage;
+            _explode = effect;
             _targetLayer = targetLayer;
         }
 
-        public void Explode()
+        public void Init()
         {
-            if (_effect != null)
-            {
-                _effect.transform.position = _position;
-                _effect.gameObject.SetActive(true);
-                _effect.Play();
-            }
-
-            int numColliders = Physics.OverlapSphereNonAlloc(_position, _radius, _targets, _targetLayer);
-
-            for (int i = 0; i < numColliders; i++)
-            {
-                IDamageable target = _targets[i].GetComponent<IDamageable>();
-                target.Health.TakeDamage(_damage);
-            }
-
-            OnExploded?.Invoke();
-        }
-    }
-
-    public class ExplosionHandler
-    {
-        private readonly ParticleSystem _explode;
-        private readonly ProjectileData _data;
-
-        private LayerMask _targetLayerMask;
-
-        public ExplosionHandler(ParticleSystem explode, ProjectileData data, LayerMask targetLayerMask)
-        {
-            _explode = explode;
-            _data = data;
-            _targetLayerMask = targetLayerMask;
-
             if (_explode != null)
             {
                 _explode.transform.SetParent(null);
@@ -66,7 +27,7 @@ namespace SiegeStorm.Destructibility
             }
         }
 
-        public void Explode(Vector3 position)
+        public void Explode(Vector3 position, float radius, int damage)
         {
             if (_explode != null)
             {
@@ -75,8 +36,15 @@ namespace SiegeStorm.Destructibility
                 _explode.Play();
             }
 
-            Explosion explosion = new(_explode, position, _data.Radius, _data.Damage, _targetLayerMask);
-            explosion.Explode();
+            int numColliders = Physics.OverlapSphereNonAlloc(position, radius, _targets, _targetLayer);
+
+            for (int i = 0; i < numColliders; i++)
+            {
+                IDamageable target = _targets[i].GetComponent<IDamageable>();
+                target.Health.TakeDamage(damage);
+            }
+
+            OnExploded?.Invoke();
         }
     }
 }

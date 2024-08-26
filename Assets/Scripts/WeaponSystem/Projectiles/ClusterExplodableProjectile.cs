@@ -1,4 +1,5 @@
 using SiegeStorm.Destructibility;
+using SiegeStorm.PoolSystem;
 using UnityEngine;
 using Zenject;
 
@@ -6,42 +7,27 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
 {
     public class ClusterProjectile : FlyingProjectile, IExplodable
     {
-        public ExplosionHandler ExplosionHandler { get; private set; }
+        public Explosion Explosion { get; private set; }
 
         [SerializeField] private ParticleSystem _explode;
         [Inject] private readonly DiContainer _diContainer;
 
-        private Projectile[] _secondaryProjectiles;
-        private Rigidbody[] _secondaryProjectilesRigidbodies;
+        private DIObjectPool<Projectile> _projectiles;
 
         private const float _initialForce = 3f;
 
         private void Awake()
         {
-            ExplosionHandler = new(_explode, Data, TargetLayerMask);
+            Explosion = new(_explode, TargetLayerMask);
+            Explosion.Init();
 
-            if (Data.TryGetModule(out ClusterExplodeModule clusterExplodeModule))
-            {
-                _secondaryProjectiles = new Projectile[clusterExplodeModule.ClustersCount];
-                _secondaryProjectilesRigidbodies = new Rigidbody[clusterExplodeModule.ClustersCount];
-
-                for (int i = 0; i < clusterExplodeModule.ClustersCount; i++)
-                {
-                    Vector3 randomPosition = GetRandomPositionAround(transform.position, clusterExplodeModule.Projectile.Data.Radius);
-                    Projectile projectile = _diContainer.InstantiatePrefabForComponent<Projectile>(clusterExplodeModule.Projectile, randomPosition, Quaternion.identity, null);
-                    
-                    _secondaryProjectiles[i] = projectile;
-                    _secondaryProjectilesRigidbodies[i] = projectile.GetComponent<Rigidbody>();
-                    
-                    gameObject.SetActive(false);
-                }
-            }
+            CreatePool();
         }
 
         public void Explode()
         {
-            ExplosionHandler.Explode(transform.position);
-            CreateSecondaryExplosions();
+            Explosion.Explode(transform.position, Data.Radius, Data.Damage);
+            SpawnSecondaryProjectiles();
         }
 
         protected override void OnFlyingEnded()
@@ -50,18 +36,21 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
             base.OnFlyingEnded();
         }
 
-        private void CreateSecondaryExplosions()
+        private void CreatePool()
         {
-            foreach (var projectile in _secondaryProjectiles)
+            if (Data.TryGetModule(out ClusterExplodeModule clusterExplodeModule))
+            {
+                _projectiles = new(clusterExplodeModule.Projectile, _diContainer, null, clusterExplodeModule.ClustersCount);
+                _projectiles.CreatePool();
+            }
+        }
+
+        private void SpawnSecondaryProjectiles()
+        {
+            foreach (var projectile in _projectiles.PoolList)
             {
                 projectile.transform.position = GetRandomPositionAround(transform.position, 1f);
-                projectile.Launch(projectile.transform.position + Vector3.up, Vector3.zero, 0);
-            }
-
-            foreach (var rb in _secondaryProjectilesRigidbodies)
-            {
-                Vector3 direction = (rb.transform.position - transform.position).normalized;
-                rb.AddForce(direction * _initialForce, ForceMode.Impulse);
+                projectile.Launch(projectile.transform.position + Vector3.up, transform.position, _initialForce);
             }
         }
 

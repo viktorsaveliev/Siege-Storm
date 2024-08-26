@@ -1,6 +1,7 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 using System;
+using SiegeStorm.FeedbackSystem;
 
 namespace SiegeStorm.WeaponSystem.ProjectileSystem
 {
@@ -12,6 +13,7 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
 
         [SerializeField] private ProjectileData _data;
         [SerializeField, ReadOnly] protected LayerMask TargetLayerMask;
+        [SerializeReference] private IActionFeedback[] _feedback;
 
         private void OnValidate()
         {
@@ -27,6 +29,12 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
         public void Complete()
         {
             OnCompleted?.Invoke();
+
+            foreach (IActionFeedback feedback in _feedback)
+            {
+                feedback.Active();
+            }
+
             gameObject.SetActive(false);
         }
     }

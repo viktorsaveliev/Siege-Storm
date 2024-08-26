@@ -5,6 +5,8 @@ namespace SiegeStorm.PoolSystem
 {
     public abstract class Pool<T> where T : Component
     {
+        public IReadOnlyList<T> PoolList => _pool;
+
         protected readonly T Prefab;
         protected readonly Transform Container;
 

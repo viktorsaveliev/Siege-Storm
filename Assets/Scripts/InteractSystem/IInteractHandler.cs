@@ -7,10 +7,6 @@ namespace SiegeStorm.PlayerController
     {
         public bool IsPointerOverUI { get; }
 
-        public event Action<IInteractable> OnPointerEnter;
-        public event Action<IInteractable> OnPointerExit;
-        public event Action<IInteractable> OnSelectObject;
-
-        public event Action<Vector3> OnClickGround;
+        public Vector3 GetTargetPosition();
     }
 }

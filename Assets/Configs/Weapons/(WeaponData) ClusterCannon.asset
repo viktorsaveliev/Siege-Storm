@@ -18,6 +18,7 @@ MonoBehaviour:
   _bulletsInMagazine: 1
   _shootDelay: 1
   _reloadDuration: 3
+  _useProjectile: 1
   _projectileSpeed: 5
   _projectilePrefab: {fileID: 6519088732716263907, guid: ac5bb2e3867b7214c861ff7dcdff5ac1,
     type: 3}

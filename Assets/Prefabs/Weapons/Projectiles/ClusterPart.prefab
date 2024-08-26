@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3970868275120912766}
   - component: {fileID: 50524308685854332}
   - component: {fileID: 2324325512206891197}
-  - component: {fileID: 1532786177900736653}
   - component: {fileID: 2492111516336695261}
   - component: {fileID: 2101060695362461097}
   m_Layer: 0
@@ -104,21 +103,26 @@ MonoBehaviour:
   TargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  _feedback:
+  - rid: 5091353843885932553
+  - rid: 5091353843885932554
   _explode: {fileID: 931298643266434467}
---- !u!114 &1532786177900736653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8263497027065345874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfa8b7edadfe9524da0863b644bafc00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _crackSettings: {fileID: 11400000, guid: a4f5ca303d6a18a40955e91afe355342, type: 2}
-  _projectile: {fileID: 2324325512206891197}
+  _rigidbody: {fileID: 2101060695362461097}
+  references:
+    version: 2
+    RefIds:
+    - rid: 5091353843885932553
+      type: {class: CameraShakeFeedback, ns: SiegeStorm.FeedbackSystem, asm: Assembly-CSharp}
+      data:
+        _duration: 0.3
+        _strength: 0.3
+        _vibrato: 5
+        _randomness: 30
+    - rid: 5091353843885932554
+      type: {class: CrackSurfaceFeedback, ns: SiegeStorm.FeedbackSystem, asm: Assembly-CSharp}
+      data:
+        _settings: {fileID: 11400000, guid: a4f5ca303d6a18a40955e91afe355342, type: 2}
+        _transform: {fileID: 6309931990113885142}
 --- !u!135 &2492111516336695261
 SphereCollider:
   m_ObjectHideFlags: 0

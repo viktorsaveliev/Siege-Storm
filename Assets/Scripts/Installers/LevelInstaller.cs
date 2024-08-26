@@ -12,6 +12,7 @@ namespace SiegeStorm
         [SerializeField] private MouseRaycaster _interactHandler;
         [SerializeField] private PlayerWeapon _playerWeapon;
         [SerializeField] private CrackSystem _crackSystem;
+        [SerializeField] private CameraShake _cameraShake;
 
         private InputData _inputData;
 
@@ -19,7 +20,7 @@ namespace SiegeStorm
         {
             Resolve();
 
-            _inputData.Init(this);
+            _inputData.Init();
         }
 
         public override void InstallBindings()
@@ -29,6 +30,7 @@ namespace SiegeStorm
             Container.Bind<IInteractHandler>().FromInstance(_interactHandler).AsSingle();
             Container.Bind<PlayerWeapon>().FromInstance(_playerWeapon).AsSingle();
             Container.Bind<CrackSystem>().FromInstance(_crackSystem).AsSingle();
+            Container.Bind<CameraShake>().FromInstance(_cameraShake).AsSingle();
         }
 
         private void Resolve()

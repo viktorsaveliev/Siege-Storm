@@ -24,4 +24,4 @@ MonoBehaviour:
       type: {class: ExplodeDelayModule, ns: SiegeStorm.WeaponSystem.ProjectileSystem,
         asm: Assembly-CSharp}
       data:
-        _delay: 3
+        _delay: 1.5

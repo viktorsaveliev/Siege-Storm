@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3970868275120912766}
   - component: {fileID: 50524308685854332}
   - component: {fileID: 6519088732716263907}
-  - component: {fileID: 1532786177900736653}
   - component: {fileID: 2492111516336695261}
   - component: {fileID: 1883390926840838469}
   m_Layer: 0
@@ -104,6 +103,9 @@ MonoBehaviour:
   TargetLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  _feedback:
+  - rid: 5091353843885932551
+  - rid: 5091353843885932556
   _flyBehaviour:
     rid: 5091353617385914373
   _explode: {fileID: 931298643266434467}
@@ -113,20 +115,18 @@ MonoBehaviour:
     - rid: 5091353617385914373
       type: {class: ParabolicFly, ns: SiegeStorm, asm: Assembly-CSharp}
       data: 
---- !u!114 &1532786177900736653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8263497027065345874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfa8b7edadfe9524da0863b644bafc00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _crackSettings: {fileID: 11400000, guid: 5e65125f9ee7e3a4a9950543a5dd8105, type: 2}
-  _projectile: {fileID: 6519088732716263907}
+    - rid: 5091353843885932551
+      type: {class: CameraShakeFeedback, ns: SiegeStorm.FeedbackSystem, asm: Assembly-CSharp}
+      data:
+        _duration: 0.5
+        _strength: 0.3
+        _vibrato: 7
+        _randomness: 30
+    - rid: 5091353843885932556
+      type: {class: CrackSurfaceFeedback, ns: SiegeStorm.FeedbackSystem, asm: Assembly-CSharp}
+      data:
+        _settings: {fileID: 11400000, guid: 5e65125f9ee7e3a4a9950543a5dd8105, type: 2}
+        _transform: {fileID: 6309931990113885142}
 --- !u!135 &2492111516336695261
 SphereCollider:
   m_ObjectHideFlags: 0

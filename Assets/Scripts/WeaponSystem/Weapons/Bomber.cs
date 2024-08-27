@@ -101,8 +101,8 @@ namespace SiegeStorm.WeaponSystem
 
         private IEnumerator MoveToTargetPosition(Vector3 targetPosition)
         {
-            Vector3 startPosition = new Vector3(transform.position.x, 0, transform.position.z);
-            Vector3 targetFlatPosition = new Vector3(targetPosition.x, 0, targetPosition.z);
+            Vector3 startPosition = new(transform.position.x, 0, transform.position.z);
+            Vector3 targetFlatPosition = new(targetPosition.x, 0, targetPosition.z);
 
             float distance = Vector3.Distance(startPosition, targetFlatPosition);
 
@@ -110,26 +110,15 @@ namespace SiegeStorm.WeaponSystem
             {
                 float step = MoveSpeed * Time.deltaTime / distance;
                 Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, step);
-                newPosition.y = transform.position.y;  // ”держиваем высоту на одном уровне
+                newPosition.y = transform.position.y;
                 transform.position = newPosition;
 
-                // ѕоворот самолета по оси Y
                 Vector3 directionToTarget = targetFlatPosition - new Vector3(transform.position.x, 0, transform.position.z);
                 if (directionToTarget != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, step);
                 }
-
-                // ќграничение поворота самолета только по оси Y
-                transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-
-                // ќпределение угла наклона (ролла) на основе направлени€
-                float rollAngle = Mathf.Clamp(Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up), -45f, 45f);
-                Quaternion rollRotation = Quaternion.Euler(0, 0, -rollAngle);
-
-                // ѕрименение наклона по оси Z
-                transform.rotation = transform.rotation * rollRotation;
 
                 startPosition = new Vector3(transform.position.x, 0, transform.position.z);
                 distance = Vector3.Distance(startPosition, targetFlatPosition);

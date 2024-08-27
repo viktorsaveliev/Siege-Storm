@@ -7,7 +7,7 @@ namespace SiegeStorm.WeaponSystem
 {
     public class RaycastWeapon : Weapon
     {
-        [SerializeField] private LineRenderer tracerLine;
+        [SerializeField] private LineRenderer _tracerLine;
         [SerializeField] private float _tracerDuration = 1f;
 
         [SerializeReference] private IActionFeedback[] _shootFeedback;
@@ -23,8 +23,19 @@ namespace SiegeStorm.WeaponSystem
             direction.y = 0;
 
             float distance = 20f;
+            FindTargetAndApplyDamage(direction, distance);
 
-            if(_coroutine != null)
+            foreach (IActionFeedback shoot in _shootFeedback)
+            {
+                shoot.Active();
+            }
+
+            base.Shoot(shootPhase);
+        }
+
+        private void FindTargetAndApplyDamage(Vector3 direction, float distance)
+        {
+            if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
             }
@@ -41,25 +52,18 @@ namespace SiegeStorm.WeaponSystem
             {
                 _coroutine = StartCoroutine(ShowTracer(transform.position + direction * distance));
             }
-
-            foreach (IActionFeedback shoot in _shootFeedback)
-            {
-                shoot.Active();
-            }
-
-            base.Shoot(shootPhase);
         }
 
         private IEnumerator ShowTracer(Vector3 hitPoint)
         {
-            tracerLine.SetPosition(0, transform.position);
-            tracerLine.SetPosition(1, hitPoint);
+            _tracerLine.SetPosition(0, transform.position);
+            _tracerLine.SetPosition(1, hitPoint);
 
-            tracerLine.enabled = true;
+            _tracerLine.enabled = true;
 
             yield return new WaitForSeconds(_tracerDuration);
 
-            tracerLine.enabled = false;
+            _tracerLine.enabled = false;
             _coroutine = null;
         }
     }

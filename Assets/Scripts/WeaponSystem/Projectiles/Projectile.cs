@@ -1,5 +1,4 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
 using System;
 using SiegeStorm.FeedbackSystem;
 
@@ -12,13 +11,8 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
         public ProjectileData Data => _data;
 
         [SerializeField] private ProjectileData _data;
-        [SerializeField, ReadOnly] protected LayerMask TargetLayerMask;
+        [SerializeField] protected LayerMask TargetLayerMask;
         [SerializeReference] private IActionFeedback[] _feedback;
-
-        private void OnValidate()
-        {
-            TargetLayerMask = LayerMask.GetMask("Character");
-        }
 
         public virtual void Launch(Vector3 startPoint, Vector3 targetPoint, float speed)
         {

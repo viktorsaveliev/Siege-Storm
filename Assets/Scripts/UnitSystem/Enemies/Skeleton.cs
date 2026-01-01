@@ -5,7 +5,8 @@ namespace SiegeStorm.UnitSystem
     {
         protected override void InitAI()
         {
-            AISystem ai = new(this, new CloseCombatPursuitState(this));
+            float attackDistance = 2f;
+            AISystem ai = new(this, new CloseCombatState(this, attackDistance));
             AddSystem(ai);
         }
     }

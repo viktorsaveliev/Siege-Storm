@@ -274,6 +274,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _data: {fileID: 11400000, guid: d4efb016ac5960d4797db22990691eb9, type: 2}
   _startProjectilePoint: {fileID: 6305254138108463103}
+  _airplaneModel: {fileID: 3413861892906818625}
+  _startPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _indicatorPrefab: {fileID: 5764420802479822179, guid: f25cb1e2f26cd764b84a169cf9d16723,
     type: 3}
   _lineRenderer: {fileID: 5341128582944574090}

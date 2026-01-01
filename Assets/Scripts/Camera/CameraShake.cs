@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 
 namespace SiegeStorm.PlayerController
@@ -6,30 +5,51 @@ namespace SiegeStorm.PlayerController
     public class CameraShake : MonoBehaviour
     {
         private Camera _camera;
-        private Tween _currentShakeTween;
+
+        private Vector3 _originalRotation;
+        private float _shakeDuration;
+        private float _shakeMagnitude;
+        private float _shakeElapsed;
+        private bool _isShaking;
 
         private void Awake()
         {
             _camera = Camera.main;
+            _originalRotation = _camera.transform.eulerAngles;
         }
 
-        private void OnDestroy()
+        private void Update()
         {
-            _currentShakeTween?.Kill();
+            if (_isShaking)
+            {
+                if (_shakeElapsed < _shakeDuration)
+                {
+                    _shakeElapsed += Time.deltaTime;
+                    float shakeAmount = _shakeMagnitude * (1f - (_shakeElapsed / _shakeDuration));
+
+                    Vector3 randomOffset = Random.insideUnitSphere * shakeAmount;
+                    _camera.transform.eulerAngles = _originalRotation + new Vector3(randomOffset.x, randomOffset.y, 0);
+                }
+                else
+                {
+                    _isShaking = false;
+                    _camera.transform.eulerAngles = _originalRotation;
+                }
+            }
         }
 
-        public void Shake(float duration = 0.5f, float strength = 0.3f, int vibrato = 10, float randomness = 90f)
+        public void Shake(float duration = 0.5f, float magnitude = 0.3f)
         {
-            _currentShakeTween?.Kill();
-            _currentShakeTween = _camera.transform.DOShakeRotation(duration, strength, vibrato, randomness);
+            _shakeDuration = duration;
+            _shakeMagnitude = magnitude;
+            _shakeElapsed = 0f;
+            _isShaking = true;
         }
 
         public void StopShake()
         {
-            if (_currentShakeTween != null && _currentShakeTween.IsActive())
-            {
-                _currentShakeTween.Kill();
-            }
+            _isShaking = false;
+            _camera.transform.eulerAngles = _originalRotation;
         }
     }
 }

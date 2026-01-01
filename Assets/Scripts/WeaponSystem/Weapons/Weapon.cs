@@ -14,7 +14,7 @@ namespace SiegeStorm.WeaponSystem
 
         public event Action OnReloadStart;
         public event Action OnReloadEnd;
-        public event Action OnFired;
+        public event Action OnShooted;
 
         [SerializeField] private WeaponData _data;
 
@@ -72,7 +72,7 @@ namespace SiegeStorm.WeaponSystem
                 Reload();
             }
 
-            OnFired?.Invoke();
+            OnShooted?.Invoke();
         }
 
         private bool CanShoot()

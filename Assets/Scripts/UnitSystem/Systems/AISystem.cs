@@ -14,7 +14,7 @@ namespace SiegeStorm.UnitSystem
 
         private Coroutine _timer;
 
-        public AISystem(Unit unit, PursuitState pursuitState)
+        public AISystem(Unit unit, AttackState pursuitState)
         {
             _unit = unit;
 
@@ -26,7 +26,7 @@ namespace SiegeStorm.UnitSystem
         #region StateMachine
         public void Pursuit(IDamageable target)
         {
-            PursuitState pursuitState = (PursuitState)_stateMachine.GetState<PursuitState>();
+            AttackState pursuitState = (AttackState)_stateMachine.GetState<AttackState>();
             pursuitState.Pursuit(target);
 
             _stateMachine.ChangeState(pursuitState);
@@ -41,11 +41,11 @@ namespace SiegeStorm.UnitSystem
             }
         }
 
-        private void InitStates(PursuitState pursuitState)
+        private void InitStates(AttackState pursuitState)
         {
             _stateMachine.StateMap = new Dictionary<Type, IState>
             {
-                [typeof(PursuitState)] = pursuitState
+                [typeof(AttackState)] = pursuitState
             };
         }
         #endregion

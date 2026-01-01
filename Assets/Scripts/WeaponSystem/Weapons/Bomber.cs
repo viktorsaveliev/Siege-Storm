@@ -1,8 +1,10 @@
 using SiegeStorm.PlayerController;
 using SiegeStorm.PoolSystem;
 using SiegeStorm.WeaponSystem.ProjectileSystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using Zenject;
 
@@ -10,12 +12,16 @@ namespace SiegeStorm.WeaponSystem
 {
     public class Bomber : ProjectileWeapon
     {
+        public event Action OnReachedPoint;
+
         private readonly List<Vector3> _targetPositions = new();
 
         private const int MaxPoints = 10;
         private const float MinDistanceBetweenPoints = 3.0f;
         private const float MoveSpeed = 10f;
 
+        [SerializeField] private GameObject _airplaneModel;
+        [SerializeField] private Transform[] _startPoints;
         [SerializeField] private Transform _indicatorPrefab;
         [SerializeField] private LineRenderer _lineRenderer;
 
@@ -51,7 +57,31 @@ namespace SiegeStorm.WeaponSystem
             }
             else if (shootStep == PlayerWeapon.ShootPhase.Canceled)
             {
+                if (_targetPositions.Count == 0)
+                {
+                    Debug.LogError("Target Positions Count = 0");
+                    return;
+                }
+
+                Transform point = GetClosestPoint(_targetPositions[0]);
+                transform.position = new(point.position.x, transform.position.y, point.position.z);
+                _airplaneModel.SetActive(true);
+
                 StartCoroutine(BombingRoutine());
+            }
+        }
+
+        protected override void OnShoot()
+        {
+            base.OnShoot();
+
+            MoveToClosestPoint();
+            OnReachedPoint += HideWeapon;
+
+            void HideWeapon()
+            {
+                OnReachedPoint -= HideWeapon;
+                _airplaneModel.SetActive(false);
             }
         }
 
@@ -80,6 +110,11 @@ namespace SiegeStorm.WeaponSystem
 
         private IEnumerator BombingRoutine()
         {
+            foreach (Transform indicator in Indicators.PoolList)
+            {
+                indicator.gameObject.SetActive(false);
+            }
+
             foreach (Vector3 targetPosition in _targetPositions)
             {
                 yield return MoveToTargetPosition(targetPosition);
@@ -90,11 +125,6 @@ namespace SiegeStorm.WeaponSystem
 
             _targetPositions.Clear();
             _lineRenderer.positionCount = 0;
-
-            foreach (Transform indicator in Indicators.PoolList)
-            {
-                indicator.gameObject.SetActive(false);
-            }
 
             base.Shoot(PlayerWeapon.ShootPhase.Canceled);
         }
@@ -125,7 +155,34 @@ namespace SiegeStorm.WeaponSystem
 
                 yield return null;
             }
+
+            OnReachedPoint?.Invoke();
         }
 
+        private void MoveToClosestPoint()
+        {
+            Transform closestPoint = GetClosestPoint(transform.position);
+            Vector3 targetPosition = new(closestPoint.position.x, transform.position.y, closestPoint.position.z);
+            StartCoroutine(MoveToTargetPosition(targetPosition));
+        }
+
+        private Transform GetClosestPoint(Vector3 position)
+        {
+            Transform closestPoint = null;
+            float closestDistance = float.MaxValue;
+
+            foreach(Transform point in _startPoints)
+            {
+                float distance = Vector3.Distance(position, point.position);
+
+                if (distance < closestDistance)
+                {
+                    closestPoint = point;
+                    closestDistance = distance;
+                }
+            }
+
+            return closestPoint;
+        }
     }
 }

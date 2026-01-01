@@ -34,7 +34,7 @@ namespace SiegeStorm.UISystem
             {
                 _slot.CurrentWeapon.OnReloadStart -= HandleReloadStart;
                 _slot.CurrentWeapon.OnReloadEnd -= HandleReloadEnd;
-                _slot.CurrentWeapon.OnFired -= UpdateBulletsCount;
+                _slot.CurrentWeapon.OnShooted -= UpdateBulletsCount;
             }
         }
 
@@ -70,14 +70,14 @@ namespace SiegeStorm.UISystem
             {
                 _slot.CurrentWeapon.OnReloadStart -= HandleReloadStart;
                 _slot.CurrentWeapon.OnReloadEnd -= HandleReloadEnd;
-                _slot.CurrentWeapon.OnFired -= UpdateBulletsCount;
+                _slot.CurrentWeapon.OnShooted -= UpdateBulletsCount;
             }
 
             _icon.sprite = weapon.Data.Icon;
 
             _slot.CurrentWeapon.OnReloadStart += HandleReloadStart;
             _slot.CurrentWeapon.OnReloadEnd += HandleReloadEnd;
-            _slot.CurrentWeapon.OnFired += UpdateBulletsCount;
+            _slot.CurrentWeapon.OnShooted += UpdateBulletsCount;
 
             UpdateBulletsCount();
         }

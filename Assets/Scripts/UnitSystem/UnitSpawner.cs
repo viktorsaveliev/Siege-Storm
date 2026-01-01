@@ -5,22 +5,25 @@ namespace SiegeStorm.UnitSystem
 {
     public class UnitSpawner : MonoBehaviour
     {
-        [SerializeField] private Warrior _enemy;
+        [SerializeField] private Warrior[] _enemies;
         [SerializeField] private Tower _tower;
 
         private void Start()
         {
-            _enemy.Init();
-
-            AISystem aiSystem = _enemy.GetSystem<AISystem>();
-
-            if(aiSystem != null)
+            foreach (Warrior enemy in _enemies)
             {
-                aiSystem.Pursuit(_tower);
-            }
-            else
-            {
-                print("ERROR");
+                enemy.Init();
+
+                AISystem aiSystem = enemy.GetSystem<AISystem>();
+
+                if (aiSystem != null)
+                {
+                    aiSystem.Pursuit(_tower);
+                }
+                else
+                {
+                    print("ERROR");
+                }
             }
         }
     }

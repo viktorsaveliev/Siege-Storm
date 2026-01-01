@@ -6,7 +6,7 @@ namespace SiegeStorm.WeaponSystem.ProjectileSystem
     {
         private void OnCollisionEnter(Collision collision)
         {
-            if(Layer.IsInLayerMask(collision.gameObject.layer, TargetLayerMask))
+            if (Layer.IsInLayerMask(collision.gameObject.layer, TargetLayerMask))
             {
                 if (collision.gameObject.TryGetComponent(out IDamageable target))
                 {
